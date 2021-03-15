@@ -64,7 +64,7 @@ def testMutatingSegments():
 
 
 def testGenRandomPopulation():
-    board: Board = loadFromFile('zad0.txt')
+    board: Board = loadFromFile('../textTests/zad0.txt')
     population = board.generateRandomPopulation(10)
     print()
 

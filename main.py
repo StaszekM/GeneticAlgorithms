@@ -5,7 +5,7 @@ from visualizer import visualize
 
 
 def tryRandomSearch():
-    board = loadFromFile('tests/zad0.5.txt')
+    board = loadFromFile('textTests/zad0.5.txt')
     result = RandomSearch.RandomSearch(board, 10, printOutput=True)
     if result is None:
         print("Could not find a solution")
