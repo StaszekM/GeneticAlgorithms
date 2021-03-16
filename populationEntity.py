@@ -31,6 +31,9 @@ class Segment:
     def isHorizontal(self) -> bool:
         return self.direction in [Direction.RIGHT, Direction.LEFT]
 
+    def getCopy(self):
+        return Segment(self.direction, self.distance)
+
 
 class Path:
     def __init__(self):
@@ -40,6 +43,14 @@ class Path:
     def __str__(self):
         return f"Path, starting at ({self.startingPoint[0]}, {self.startingPoint[1]}): " + ", ".join(
             [str(segment) for segment in self.segments])
+
+    def getCopy(self):
+        result = Path()
+        result.startingPoint = self.startingPoint
+        for segment in self.segments:
+            result.segments.append(segment.getCopy())
+
+        return result
 
     def fixPath(self):
         """Fixes redundant segments, e.g. two vertical segments one after another"""
@@ -69,7 +80,8 @@ class Path:
                     minusDirection = Direction.UP
 
                 segmentBalance = segment.distance if segment.direction == plusDirection else -segment.distance
-                prevSegmentBalance = prevSegment.distance if prevSegment.direction == plusDirection else -prevSegment.distance
+                prevSegmentBalance = prevSegment.distance \
+                    if prevSegment.direction == plusDirection else -prevSegment.distance
                 total = segmentBalance + prevSegmentBalance
 
                 self.segments.pop(index - 1)
@@ -92,9 +104,6 @@ class Path:
 
         random = Random()
         matchingSegment = self.segments[index]
-
-        # previousSegment = None if index == 0 else self.segments[index - 1]
-        # nextSegment = None if index == len(self.segments) - 1 else self.segments[index + 1]
 
         cutStartPoint = random.randint(0, matchingSegment.distance - 1)
         cutEndPoint = random.randint(cutStartPoint + 1, matchingSegment.distance)
@@ -130,6 +139,36 @@ class Path:
 class PopulationEntity:
     def __init__(self):
         self.paths: List[Path] = []
+
+    def getCopy(self):
+        result = PopulationEntity()
+        for path in self.paths:
+            result.paths.append(path.getCopy())
+        return result
+
+    def mutate(self, probability: float, strength: int):
+        random = Random()
+        if random.random() >= probability:
+            pathIndex = random.randint(0, len(self.paths) - 1)
+            segmentIndex = random.randint(0, len(self.paths[pathIndex].segments) - 1)
+            self.paths[pathIndex].mutateSegment(segmentIndex, strength)
+
+
+def crossover(entity1: PopulationEntity, entity2: PopulationEntity, p: float) -> PopulationEntity:
+    if len(entity1.paths) != len(entity2.paths):
+        raise ValueError(
+            f"Trying to crossover entities that don't have the same number of paths "
+            f"({len(entity1.paths)} and {len(entity2.paths)})")
+
+    result = PopulationEntity()
+    random = Random()
+
+    for index in range(len(entity1.paths)):
+        if random.random() >= p:
+            result.paths.append(entity1.paths[index].getCopy())
+        else:
+            result.paths.append(entity2.paths[index].getCopy())
+    return result
 
 
 def joinTwoPoints(startingPoint: Point, endingPoint: Point) -> Path:
@@ -181,11 +220,11 @@ def joinTwoPoints(startingPoint: Point, endingPoint: Point) -> Path:
                 absDistanceX = 0
         elif horizontal:
             direction = preferredDirectionX
-            distance = 1 if absDistanceX == 1 else random.randint(1, absDistanceX)
+            distance = random.randint(1, absDistanceX)
             absDistanceX = absDistanceX - distance
         else:
             direction = preferredDirectionY
-            distance = 1 if absDistanceY == 1 else random.randint(1, absDistanceY)
+            distance = random.randint(1, absDistanceY)
             absDistanceY = absDistanceY - distance
 
         horizontal = not horizontal

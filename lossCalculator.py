@@ -1,7 +1,7 @@
 from pcbBoard import Board
 from populationEntity import PopulationEntity, Direction
 
-from typing import List
+from typing import List, Tuple
 
 
 class LossWeights:
@@ -13,12 +13,14 @@ class LossWeights:
         self.segmentsCount = 1
 
 
+CalculatorResult = Tuple[float, bool, Tuple[int, int, int, int, int]]
+
+
 class LossCalculator:
     def __init__(self, lossWeights: LossWeights):
         self.lossWeights = lossWeights
 
-    def calculateLoss(self, populationEntity: PopulationEntity, board: Board) -> \
-            (float, bool, (int, int, int, int, int)):
+    def calculateLoss(self, populationEntity: PopulationEntity, board: Board) -> CalculatorResult:
         """Calculates loss for a specific Entity on a specific Board, using this Calculator's punishment weights,
         returns float - total loss, boolean - true if path is valid (no intersections or paths outside of the board),
         a tuple of ints containing (total paths length, number of segments, number of paths out of the board,

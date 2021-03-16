@@ -1,6 +1,10 @@
+from entitySelectors import TournamentSelector
+from geneticAlgorithm import GeneticAlgorithm
+from lossCalculator import LossWeights, LossCalculator
 from randomSearch import RandomSearch
 from pcbBoard import loadFromFile
-from tests.methodTests import testLossCalculator
+from tests.methodTests import testGenRandomPopulation
+
 from visualizer import visualize
 
 
@@ -16,7 +20,33 @@ def tryRandomSearch():
             print(path)
 
 
+def tryGA():
+    board = loadFromFile('textTests/zad1.txt')
+    populationSize = 1000
+    selector = TournamentSelector(400)
+    crossoverThreshold = 0.7
+    crossoverProbability = 0.7
+    mutationProbability = 0.7
+    mutationStrength = 3
+    maximumLoss = 25
+
+    lossWeights = LossWeights()
+    lossWeights.intersectionCount = 20
+    lossWeights.outOfBoardPathCount = 30
+    lossWeights.outOfBoardLength = 25
+    lossWeights.totalPathLength = 1
+    lossWeights.segmentsCount = 1
+    calculator = LossCalculator(lossWeights)
+
+    alg = GeneticAlgorithm(board, populationSize, calculator, selector, crossoverThreshold, crossoverProbability,
+                           mutationProbability, mutationStrength, maximumLoss)
+    alg.algorithm()
+
+
 if __name__ == "__main__":
-    tryRandomSearch()
+    # tryRandomSearch()
     # testLossCalculator()
+    # testTournamentSelector()
+    # tryGA()
+    testGenRandomPopulation()
     pass

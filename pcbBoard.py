@@ -33,7 +33,7 @@ class Board:
             for pointPair in self.pointsToConnect:
                 (startPoint, endPoint) = pointPair
                 entity.paths.append(joinTwoPoints(startPoint, endPoint))
-                result.append(entity)
+            result.append(entity)
 
         return result
 
