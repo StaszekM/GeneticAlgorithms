@@ -6,7 +6,7 @@ from populationEntity import PopulationEntity, Direction
 
 
 def getRandomColor() -> str:
-    return "#" + ''.join([choice('0123456789ABCDEF') for j in range(6)])
+    return "#" + ''.join([choice('0123456789ABCDEF') for _ in range(6)])
 
 
 def visualize(entity: PopulationEntity, board: Board):

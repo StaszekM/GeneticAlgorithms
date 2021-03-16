@@ -1,1 +1,3 @@
-Point = (int, int)
+from typing import Tuple
+
+Point = Tuple[int, int]

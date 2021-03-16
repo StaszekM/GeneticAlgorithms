@@ -5,6 +5,7 @@ from entitySelectors import EntityWithLoss, Selector
 from lossCalculator import LossCalculator
 from pcbBoard import Board
 from populationEntity import PopulationEntity, crossover
+from utils import generateRandomPopulation
 from visualizer import visualize
 
 import matplotlib.pyplot as plt
@@ -30,7 +31,7 @@ class GeneticAlgorithm:
     def algorithm(self):
         start = datetime.now()
         random = Random()
-        initialPopulation = self.board.generateRandomPopulation(self.populationSize)
+        initialPopulation = generateRandomPopulation(self.populationSize, self.board)
         populationWithLoss: List[EntityWithLoss] = [(entity, self.lossCalculator.calculateLoss(entity, self.board)) for
                                                     entity in initialPopulation]
 
@@ -74,7 +75,7 @@ class GeneticAlgorithm:
 
     def __stopCondition(self, population: List[EntityWithLoss]) -> bool:
         for entity in population:
-            if entity[1][1] or entity[1][0] <= self.maximumLoss or self.generation > 500:
+            if entity[1][1] or entity[1][0] <= self.maximumLoss or self.generation > 2000:
                 return True
 
         return False

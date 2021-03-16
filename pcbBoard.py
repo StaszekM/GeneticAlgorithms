@@ -2,8 +2,6 @@ from typing import List
 
 from utilTypes import Point
 
-from populationEntity import PopulationEntity, joinTwoPoints
-
 
 class Board:
     def __init__(self, width: int, height: int):
@@ -21,21 +19,6 @@ class Board:
                              f"to a board of size {self.width}x{self.height}")
 
         self.pointsToConnect.append(((startX, startY), (endX, endY)))
-
-    def generateRandomPopulation(self, size: int) -> List[PopulationEntity]:
-        """Generate random population of size size that connects corresponding points on this Board"""
-        if size <= 0:
-            raise ValueError(f"Trying to generate population with size {size}")
-
-        result: List[PopulationEntity] = []
-        for i in range(size):
-            entity: PopulationEntity = PopulationEntity()
-            for pointPair in self.pointsToConnect:
-                (startPoint, endPoint) = pointPair
-                entity.paths.append(joinTwoPoints(startPoint, endPoint))
-            result.append(entity)
-
-        return result
 
 
 def loadFromFile(filePath: str) -> Board:

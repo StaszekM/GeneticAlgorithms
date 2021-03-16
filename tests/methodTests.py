@@ -2,6 +2,7 @@ from lossCalculator import LossWeights, LossCalculator
 from pcbBoard import Board, loadFromFile
 from populationEntity import Path, Segment, Direction, PopulationEntity
 from entitySelectors import TournamentSelector
+from utils import generateRandomPopulation
 from visualizer import visualize
 
 
@@ -67,7 +68,7 @@ def testMutatingSegments():
 
 def testGenRandomPopulation():
     board: Board = loadFromFile('textTests/zad1.txt')
-    population = board.generateRandomPopulation(10)
+    population = generateRandomPopulation(10, board)
     for element in population:
         visualize(element, board)
     print()
@@ -75,8 +76,8 @@ def testGenRandomPopulation():
 
 def testTournamentSelector():
     board: Board = loadFromFile('textTests/zad0.txt')
-    population = board.generateRandomPopulation(1000)
-    selector: TournamentSelector = TournamentSelector(100)
+    population = generateRandomPopulation(1000, board)
+    selector: TournamentSelector = TournamentSelector(500)
 
     calculator: LossCalculator = LossCalculator(LossWeights())
     popWithLoss = [(entity, calculator.calculateLoss(entity, board)) for entity in population]

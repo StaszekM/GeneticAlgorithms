@@ -47,6 +47,6 @@ if __name__ == "__main__":
     # tryRandomSearch()
     # testLossCalculator()
     # testTournamentSelector()
-    # tryGA()
-    testGenRandomPopulation()
+    tryGA()
+    # testGenRandomPopulation()
     pass

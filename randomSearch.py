@@ -3,6 +3,7 @@ from pcbBoard import Board
 from typing import Optional
 
 from populationEntity import PopulationEntity
+from utils import generateRandomPopulation
 
 
 class RandomSearch:
@@ -14,7 +15,7 @@ class RandomSearch:
             if printOutput:
                 print(f"Attempt {i + 1}/{numberOfRounds}")
 
-            population = board.generateRandomPopulation(1000)
+            population = generateRandomPopulation(1000, board)
             for entity in population:
                 (_, isValid, _) = lossCalculator.calculateLoss(entity, board)
                 if isValid:
