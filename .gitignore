@@ -1,3 +1,5 @@
 .idea
 textTests/**
 testresults/**
+__pycache__/**
+tests/__pycache__/**
