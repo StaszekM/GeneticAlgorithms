@@ -39,7 +39,7 @@ def joinTwoPoints(startingPoint: Point, endingPoint: Point, board: Board) -> Pat
 
     (x, y) = (startingPoint[0], startingPoint[1])
     if distanceX == 0:
-        if random.random() > 0.5:
+        if random.random() > 0.25:
             direction = choice([Direction.LEFT, Direction.RIGHT])
             distance = random.randint(1, board.width / 2)
             resultPath.segments.append(Segment(direction, distance))
@@ -52,7 +52,7 @@ def joinTwoPoints(startingPoint: Point, endingPoint: Point, board: Board) -> Pat
             resultPath.mutateSegment(0, 1)
             return resultPath
     elif distanceY == 0:
-        if random.random() > 0.5:
+        if random.random() > 0.25:
             direction = choice([Direction.UP, Direction.DOWN])
             distance = random.randint(1, board.height / 2)
             resultPath.segments.append(Segment(direction, distance))
