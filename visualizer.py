@@ -56,3 +56,4 @@ def visualize(entity: PopulationEntity, board: Board, filePath: str):
                 draw.ellipse([endX - pointWidth, endY - pointWidth, endX + pointWidth, endY + pointWidth],
                              fill=color)
     resultImage.save(filePath)
+    resultImage.close()

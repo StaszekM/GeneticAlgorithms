@@ -46,8 +46,8 @@ def tryGA():
 
 if __name__ == "__main__":
     # tryRandomSearch()
-    testLossCalculator()
+    # testLossCalculator()
     # testTournamentSelector()
-    # tryGA()
+    tryGA()
     # testGenRandomPopulation()
     pass
