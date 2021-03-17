@@ -30,7 +30,7 @@ class TournamentSelector(Selector):
                 f"TournamentSelector - trying to select {self.N} from a population with {populationLength} entities.")
         while True:
             populationSample: List[Tuple[PopulationEntity, CalculatorResult]] = random_sample(population, self.N)
-            populationSample.sort(key=lambda pair: pair[1][0])
+            bestSample: PopulationEntity = min(populationSample, key=lambda pair: pair[1][0])[0]
 
-            if omitEntity is None or populationSample[0] != omitEntity:
-                return populationSample[0][0]
+            if omitEntity is None or bestSample != omitEntity:
+                return bestSample

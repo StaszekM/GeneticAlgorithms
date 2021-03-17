@@ -3,7 +3,7 @@ from geneticAlgorithm import GeneticAlgorithm
 from lossCalculator import LossWeights, LossCalculator
 from randomSearch import RandomSearch
 from pcbBoard import loadFromFile
-from tests.methodTests import testGenRandomPopulation
+from tests.methodTests import testGenRandomPopulation, testTournamentSelector
 
 from visualizer import visualize
 
@@ -24,9 +24,9 @@ def tryGA():
     board = loadFromFile('textTests/zad1.txt')
     populationSize = 1000
     selector = TournamentSelector(400)
-    crossoverThreshold = 0.7
-    crossoverProbability = 0.7
-    mutationProbability = 0.7
+    crossoverThreshold = 0.3
+    crossoverProbability = 0.3
+    mutationProbability = 0.3
     mutationStrength = 3
     maximumLoss = 25
 
@@ -46,7 +46,7 @@ def tryGA():
 if __name__ == "__main__":
     # tryRandomSearch()
     # testLossCalculator()
-    # testTournamentSelector()
-    tryGA()
+    testTournamentSelector()
+    # tryGA()
     # testGenRandomPopulation()
     pass

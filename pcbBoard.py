@@ -33,4 +33,6 @@ def loadFromFile(filePath: str) -> Board:
         [startX, startY, endX, endY] = [int(value) for value in line.strip().split(";")]
         result.addPointPair((startX, startY), (endX, endY))
 
+    file.close()
+
     return result
