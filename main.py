@@ -3,7 +3,7 @@ from geneticAlgorithm import GeneticAlgorithm
 from lossCalculator import LossWeights, LossCalculator
 from randomSearch import RandomSearch
 from pcbBoard import loadFromFile
-from tests.methodTests import testGenRandomPopulation, testTournamentSelector
+from tests.methodTests import testGenRandomPopulation
 
 from visualizer import visualize
 
@@ -15,7 +15,8 @@ def tryRandomSearch():
         print("Could not find a solution")
     else:
         print("Found a solution:")
-        visualize(result, board)
+        visualize(result, board,
+                  f'C:\\Users\\Staszek\\PycharmProjects\\GeneticAlgorithmsPCB\\testresults\\randomsearch.png')
         for path in result.paths:
             print(path)
 
@@ -46,7 +47,7 @@ def tryGA():
 if __name__ == "__main__":
     # tryRandomSearch()
     # testLossCalculator()
-    testTournamentSelector()
+    # testTournamentSelector()
     # tryGA()
-    # testGenRandomPopulation()
+    testGenRandomPopulation()
     pass

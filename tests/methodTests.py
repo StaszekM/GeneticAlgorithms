@@ -69,8 +69,8 @@ def testMutatingSegments():
 def testGenRandomPopulation():
     board: Board = loadFromFile('textTests/zad1.txt')
     population = generateRandomPopulation(10, board)
-    for element in population:
-        visualize(element, board)
+    for index, element in enumerate(population):
+        visualize(element, board, f'C:\\Users\\Staszek\\PycharmProjects\\GeneticAlgorithmsPCB\\testresults\\randpop-{index}.png')
     print()
 
 

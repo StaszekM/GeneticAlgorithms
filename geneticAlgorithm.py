@@ -63,6 +63,9 @@ class GeneticAlgorithm:
             print(f"Generation {self.generation}")
             plotX.append(self.generation)
             plotY.append(bestEntity[1][0])
+            if self.generation % 10 == 0:
+                visualize(bestEntity[0], self.board,
+                          f'C:\\Users\\Staszek\\PycharmProjects\\GeneticAlgorithmsPCB\\testresults\\generation-{self.generation}.png')
 
         end = datetime.now()
         diff = end - start
@@ -71,7 +74,6 @@ class GeneticAlgorithm:
         fig, ax = plt.subplots()
         ax.plot(plotX, plotY)
         plt.show()
-        visualize(bestEntity[0], self.board)
 
     def __stopCondition(self, population: List[EntityWithLoss]) -> bool:
         for entity in population:
