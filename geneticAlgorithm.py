@@ -44,6 +44,8 @@ class GeneticAlgorithm:
         plotY = []
         while not self.__stopCondition(currentPopulation):
             newPopulation: List[EntityWithLoss] = []
+            self.generation += 1
+            print(f"Creating generation {self.generation}")
             while len(newPopulation) != self.populationSize:
                 P1: PopulationEntity = self.selector.select(currentPopulation, self.board)
                 P2: PopulationEntity = self.selector.select(currentPopulation, self.board, omitEntity=P1)
@@ -59,8 +61,6 @@ class GeneticAlgorithm:
                     bestEntity = entityWithLoss
                 newPopulation.append(entityWithLoss)
             currentPopulation = newPopulation
-            self.generation += 1
-            print(f"Generation {self.generation}")
             plotX.append(self.generation)
             plotY.append(bestEntity[1][0])
             if self.generation % 10 == 0:
@@ -70,7 +70,7 @@ class GeneticAlgorithm:
         end = datetime.now()
         diff = end - start
         print(f"Alg finished, time: {diff.total_seconds()}")
-        print(f"Best solution, found after {self.generation - 1} generations")
+        print(f"Best solution, found after {self.generation} generations")
         fig, ax = plt.subplots()
         ax.plot(plotX, plotY)
         plt.show()
