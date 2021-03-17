@@ -71,6 +71,8 @@ class GeneticAlgorithm:
         diff = end - start
         print(f"Alg finished, time: {diff.total_seconds()}")
         print(f"Best solution, found after {self.generation} generations")
+        visualize(bestEntity[0], self.board,
+                  f'C:\\Users\\Staszek\\PycharmProjects\\GeneticAlgorithmsPCB\\testresults\\bestsolution.png')
         fig, ax = plt.subplots()
         ax.plot(plotX, plotY)
         plt.show()

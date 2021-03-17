@@ -148,10 +148,10 @@ class PopulationEntity:
 
     def mutate(self, probability: float, strength: int):
         random = Random()
-        if random.random() >= probability:
-            pathIndex = random.randint(0, len(self.paths) - 1)
-            segmentIndex = random.randint(0, len(self.paths[pathIndex].segments) - 1)
-            self.paths[pathIndex].mutateSegment(segmentIndex, strength)
+        for path in self.paths:
+            if random.random() >= probability:
+                segmentIndex = random.randint(0, len(path.segments) - 1)
+                path.mutateSegment(segmentIndex, strength)
 
 
 def crossover(entity1: PopulationEntity, entity2: PopulationEntity, p: float) -> PopulationEntity:

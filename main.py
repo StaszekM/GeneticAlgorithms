@@ -28,7 +28,7 @@ def tryGA():
     crossoverThreshold = 0.2
     crossoverProbability = 0.2
     mutationProbability = 0.1
-    mutationStrength = 3
+    mutationStrength = 1
     maximumLoss = 25
 
     lossWeights = LossWeights()
