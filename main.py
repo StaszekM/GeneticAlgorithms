@@ -3,7 +3,7 @@ from geneticAlgorithm import GeneticAlgorithm
 from lossCalculator import LossWeights, LossCalculator
 from randomSearch import RandomSearch
 from pcbBoard import loadFromFile
-from tests.methodTests import testGenRandomPopulation
+from tests.methodTests import testGenRandomPopulation, testLossCalculator
 
 from visualizer import visualize
 
@@ -46,8 +46,8 @@ def tryGA():
 
 if __name__ == "__main__":
     # tryRandomSearch()
-    # testLossCalculator()
+    testLossCalculator()
     # testTournamentSelector()
     # tryGA()
-    testGenRandomPopulation()
+    # testGenRandomPopulation()
     pass

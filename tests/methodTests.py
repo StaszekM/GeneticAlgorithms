@@ -21,21 +21,26 @@ def testLossCalculator():
     samplePath2 = Path()
     samplePath2.startingPoint = (3, 1)
     samplePath2.segments = [Segment(Direction.LEFT, 1), Segment(Direction.DOWN, 5), Segment(Direction.RIGHT, 2),
-                            Segment(Direction.UP, 3), Segment(Direction.LEFT, 1)]
+                            Segment(Direction.UP, 4), Segment(Direction.LEFT, 3), Segment(Direction.DOWN, 1), Segment(Direction.RIGHT, 2)]
+
+    samplePath3 = Path()
+    samplePath3.startingPoint = (1, 1)
+    samplePath3.segments = [Segment(Direction.RIGHT, 1), Segment(Direction.DOWN, 3), Segment(Direction.RIGHT, 1)]
 
     sampleEntity = PopulationEntity()
     sampleEntity.paths.append(samplePath)
     sampleEntity.paths.append(samplePath2)
+    sampleEntity.paths.append(samplePath3)
 
     weights = LossWeights()
     p = LossCalculator(weights)
 
     # EXPECTED:
-    # totalPathLength = 30
-    # segmentsCount = 16
+    # totalPathLength = 41
+    # segmentsCount = 21
     # outOfBoardPathCount = 1
     # outOfBoardLength = 7
-    # numberOfIntersections = 2
+    # numberOfIntersections = 9
     print(p.calculateLoss(sampleEntity, board))
 
 
