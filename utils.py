@@ -1,4 +1,4 @@
-from random import Random
+from random import Random, choice
 from typing import List
 from pcbBoard import Board
 from populationEntity import Path, Direction, Segment, PopulationEntity
@@ -35,23 +35,37 @@ def joinTwoPoints(startingPoint: Point, endingPoint: Point, board: Board) -> Pat
     resultPath: Path = Path()
     resultPath.startingPoint = (startingPoint[0], startingPoint[1])
 
-    if distanceX == 0:
-        direction = Direction.DOWN if distanceY > 0 else Direction.UP
-        resultPath.segments.append(Segment(direction.DOWN, abs(distanceY)))
-        resultPath.mutateSegment(0, 1)
-        return resultPath
-
-    if distanceY == 0:
-        direction = Direction.RIGHT if distanceX > 0 else Direction.LEFT
-        resultPath.segments.append(Segment(direction, abs(distanceX)))
-        resultPath.mutateSegment(0, 1)
-        return resultPath
+    goTowardsEndProbability = 0.15
 
     (x, y) = (startingPoint[0], startingPoint[1])
+    if distanceX == 0:
+        if random.random() > 0.5:
+            direction = choice([Direction.LEFT, Direction.RIGHT])
+            distance = random.randint(1, board.width / 2)
+            resultPath.segments.append(Segment(direction, distance))
+            x += distance if direction == direction.RIGHT else -distance
 
-    goTowardsEndProbability = 0.1
+            horizontal = False
+        else:
+            direction = Direction.DOWN if distanceY > 0 else Direction.UP
+            resultPath.segments.append(Segment(direction.DOWN, abs(distanceY)))
+            resultPath.mutateSegment(0, 1)
+            return resultPath
+    elif distanceY == 0:
+        if random.random() > 0.5:
+            direction = choice([Direction.UP, Direction.DOWN])
+            distance = random.randint(1, board.height / 2)
+            resultPath.segments.append(Segment(direction, distance))
+            y += distance if direction == direction.DOWN else -distance
+            horizontal = True
+        else:
+            direction = Direction.RIGHT if distanceX > 0 else Direction.LEFT
+            resultPath.segments.append(Segment(direction, abs(distanceX)))
+            resultPath.mutateSegment(0, 1)
+            return resultPath
+    else:
+        horizontal: bool = random.random() >= 0.5
 
-    horizontal: bool = random.random() >= 0.5
     while x != endingPoint[0] or y != endingPoint[1]:
         if x == endingPoint[0] or y == endingPoint[1]:
             if x == endingPoint[0]:
