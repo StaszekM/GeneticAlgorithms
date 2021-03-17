@@ -35,7 +35,7 @@ def joinTwoPoints(startingPoint: Point, endingPoint: Point, board: Board) -> Pat
     resultPath: Path = Path()
     resultPath.startingPoint = (startingPoint[0], startingPoint[1])
 
-    goTowardsEndProbability = 0.15
+    goTowardsEndProbability = 0.3
 
     (x, y) = (startingPoint[0], startingPoint[1])
     if distanceX == 0:

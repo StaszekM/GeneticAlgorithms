@@ -24,10 +24,10 @@ def tryRandomSearch():
 def tryGA():
     board = loadFromFile('textTests/zad1.txt')
     populationSize = 1000
-    selector = TournamentSelector(400)
-    crossoverThreshold = 0.3
-    crossoverProbability = 0.3
-    mutationProbability = 0.3
+    selector = TournamentSelector(150)
+    crossoverThreshold = 0.2
+    crossoverProbability = 0.2
+    mutationProbability = 0.1
     mutationStrength = 3
     maximumLoss = 25
 
@@ -35,8 +35,8 @@ def tryGA():
     lossWeights.intersectionCount = 20
     lossWeights.outOfBoardPathCount = 30
     lossWeights.outOfBoardLength = 25
-    lossWeights.totalPathLength = 1
-    lossWeights.segmentsCount = 1
+    lossWeights.totalPathLength = 0.5
+    lossWeights.segmentsCount = 0.5
     calculator = LossCalculator(lossWeights)
 
     alg = GeneticAlgorithm(board, populationSize, calculator, selector, crossoverThreshold, crossoverProbability,
@@ -48,6 +48,6 @@ if __name__ == "__main__":
     # tryRandomSearch()
     # testLossCalculator()
     # testTournamentSelector()
-    # tryGA()
-    testGenRandomPopulation()
+    tryGA()
+    # testGenRandomPopulation()
     pass
