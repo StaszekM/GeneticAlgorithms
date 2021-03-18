@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from random import sample as random_sample
+from random import uniform
 from typing import List, Tuple, Optional
 
 from populationEntity import PopulationEntity
@@ -34,3 +35,25 @@ class TournamentSelector(Selector):
 
             if omitEntity is None or bestSample != omitEntity:
                 return bestSample
+
+
+class RouletteSelector(Selector):
+
+    def select(self, population: List[EntityWithLoss], board: Board,
+               omitEntity: Optional[PopulationEntity] = None) -> PopulationEntity:
+        minLoss: float = min(population, key=lambda element: element[1][0])[1][0]
+
+        fitnessTotal = 0
+        entitiesWithFitness = []
+        for entity in population:
+            fitness = minLoss / entity[1][0]
+            entitiesWithFitness.append((entity[0], fitness, (fitnessTotal, fitnessTotal + fitness)))
+            fitnessTotal += fitness
+
+        while True:
+            value = uniform(0, fitnessTotal)
+            for entity in entitiesWithFitness:
+                (minRange, maxRange) = entity[2]
+                if minRange <= value < maxRange:
+                    if omitEntity is None or entity[0] != omitEntity:
+                        return entity[0]

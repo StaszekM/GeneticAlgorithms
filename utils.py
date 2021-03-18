@@ -41,7 +41,7 @@ def joinTwoPoints(startingPoint: Point, endingPoint: Point, board: Board) -> Pat
     if distanceX == 0:
         if random.random() > 0.25:
             direction = choice([Direction.LEFT, Direction.RIGHT])
-            distance = random.randint(1, board.width / 2)
+            distance = random.randint(1, 3 * board.width / 2)
             resultPath.segments.append(Segment(direction, distance))
             x += distance if direction == direction.RIGHT else -distance
 
@@ -54,7 +54,7 @@ def joinTwoPoints(startingPoint: Point, endingPoint: Point, board: Board) -> Pat
     elif distanceY == 0:
         if random.random() > 0.25:
             direction = choice([Direction.UP, Direction.DOWN])
-            distance = random.randint(1, board.height / 2)
+            distance = random.randint(1, 3 * board.height / 2)
             resultPath.segments.append(Segment(direction, distance))
             y += distance if direction == direction.DOWN else -distance
             horizontal = True
@@ -87,7 +87,7 @@ def joinTwoPoints(startingPoint: Point, endingPoint: Point, board: Board) -> Pat
 
                 direction = preferredDirection if random.random() > goTowardsEndProbability else oppositeDirection
 
-            distance = random.randint(1, ceil(abs(x - endingPoint[0]) * 1.5))
+            distance = random.randint(1, ceil(abs(x - endingPoint[0]) * 3))
             x += distance if direction == Direction.RIGHT else -distance
         else:
             if y <= 0 or y >= board.height:
@@ -98,7 +98,7 @@ def joinTwoPoints(startingPoint: Point, endingPoint: Point, board: Board) -> Pat
 
                 direction = preferredDirection if random.random() > goTowardsEndProbability else oppositeDirection
 
-            distance = random.randint(1, ceil(abs(y - endingPoint[1]) * 1.5))
+            distance = random.randint(1, ceil(abs(y - endingPoint[1]) * 3))
             y += distance if direction == Direction.DOWN else -distance
 
         horizontal = not horizontal

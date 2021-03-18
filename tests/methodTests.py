@@ -1,7 +1,7 @@
 from lossCalculator import LossWeights, LossCalculator
 from pcbBoard import Board, loadFromFile
 from populationEntity import Path, Segment, Direction, PopulationEntity
-from entitySelectors import TournamentSelector
+from entitySelectors import TournamentSelector, RouletteSelector
 from utils import generateRandomPopulation
 from visualizer import visualize
 
@@ -21,7 +21,8 @@ def testLossCalculator():
     samplePath2 = Path()
     samplePath2.startingPoint = (3, 1)
     samplePath2.segments = [Segment(Direction.LEFT, 1), Segment(Direction.DOWN, 5), Segment(Direction.RIGHT, 2),
-                            Segment(Direction.UP, 4), Segment(Direction.LEFT, 3), Segment(Direction.DOWN, 1), Segment(Direction.RIGHT, 2)]
+                            Segment(Direction.UP, 4), Segment(Direction.LEFT, 3), Segment(Direction.DOWN, 1),
+                            Segment(Direction.RIGHT, 2)]
 
     samplePath3 = Path()
     samplePath3.startingPoint = (1, 1)
@@ -75,7 +76,8 @@ def testGenRandomPopulation():
     board: Board = loadFromFile('textTests/zad1.txt')
     population = generateRandomPopulation(10, board)
     for index, element in enumerate(population):
-        visualize(element, board, f'C:\\Users\\Staszek\\PycharmProjects\\GeneticAlgorithmsPCB\\testresults\\randpop-{index}.png')
+        visualize(element, board,
+                  f'C:\\Users\\Staszek\\PycharmProjects\\GeneticAlgorithmsPCB\\testresults\\randpop-{index}.png')
     print()
 
 
@@ -83,6 +85,16 @@ def testTournamentSelector():
     board: Board = loadFromFile('textTests/zad0.txt')
     population = generateRandomPopulation(1000, board)
     selector: TournamentSelector = TournamentSelector(500)
+
+    calculator: LossCalculator = LossCalculator(LossWeights())
+    popWithLoss = [(entity, calculator.calculateLoss(entity, board)) for entity in population]
+    selector.select(popWithLoss, board)
+
+
+def testRouletteSelector():
+    board: Board = loadFromFile('textTests/zad0.txt')
+    population = generateRandomPopulation(10, board)
+    selector: RouletteSelector = RouletteSelector()
 
     calculator: LossCalculator = LossCalculator(LossWeights())
     popWithLoss = [(entity, calculator.calculateLoss(entity, board)) for entity in population]

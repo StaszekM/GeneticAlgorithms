@@ -1,9 +1,9 @@
-from entitySelectors import TournamentSelector
+from entitySelectors import TournamentSelector, RouletteSelector
 from geneticAlgorithm import GeneticAlgorithm
 from lossCalculator import LossWeights, LossCalculator
 from randomSearch import RandomSearch
 from pcbBoard import loadFromFile
-from tests.methodTests import testGenRandomPopulation, testLossCalculator
+from tests.methodTests import testGenRandomPopulation, testLossCalculator, testRouletteSelector
 
 from visualizer import visualize
 
@@ -50,4 +50,5 @@ if __name__ == "__main__":
     # testTournamentSelector()
     tryGA()
     # testGenRandomPopulation()
+    # testRouletteSelector()
     pass
