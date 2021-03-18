@@ -47,11 +47,11 @@ def testLossCalculator():
 
 def testMutatingSegments():
     verticalLine = Path()
-    verticalLine.startingPoint = (1, 1)
+    verticalLine.startingPoint = (13, 13)
     verticalLine.segments.append(Segment(Direction.UP, 5))
 
     horizontalLine = Path()
-    horizontalLine.startingPoint = (2, 3)
+    horizontalLine.startingPoint = (2, 2)
     horizontalLine.segments.append(Segment(Direction.RIGHT, 6))
 
     trickyPath = Path()
@@ -59,17 +59,19 @@ def testMutatingSegments():
     trickyPath.segments = [Segment(Direction.RIGHT, 1), Segment(Direction.UP, 1), Segment(Direction.RIGHT, 3),
                            Segment(Direction.DOWN, 1)]
 
-    print(f"Vertical line before: {verticalLine}")
-    verticalLine.mutateSegment(0, 2)
-    print(f"Vertical line after: {verticalLine}")
+    entity = PopulationEntity()
+    entity.paths = [verticalLine, horizontalLine, trickyPath]
 
-    print(f"Horizontal line before: {horizontalLine}")
-    horizontalLine.mutateSegment(0, 2)
-    print(f"Vertical line after: {horizontalLine}")
+    board = Board(16, 16)
+    visualize(entity, board,
+              'C:\\Users\\Staszek\\PycharmProjects\\GeneticAlgorithmsPCB\\testresults\\testmutating-before.png')
 
-    print(f"Tricky path before: {trickyPath}")
-    trickyPath.mutateSegment(2, 2)
-    print(f"Tricky path after: {trickyPath}")
+    verticalLine.mutateSegment(0, 1)
+    horizontalLine.mutateSegment(0, 1)
+    trickyPath.mutateSegment(2, 1)
+
+    visualize(entity, board,
+              'C:\\Users\\Staszek\\PycharmProjects\\GeneticAlgorithmsPCB\\testresults\\testmutating-after.png')
 
 
 def testGenRandomPopulation():

@@ -3,7 +3,7 @@ from geneticAlgorithm import GeneticAlgorithm
 from lossCalculator import LossWeights, LossCalculator
 from randomSearch import RandomSearch
 from pcbBoard import loadFromFile
-from tests.methodTests import testGenRandomPopulation, testLossCalculator, testRouletteSelector
+from tests.methodTests import testGenRandomPopulation, testLossCalculator, testRouletteSelector, testMutatingSegments
 
 from visualizer import visualize
 
@@ -48,7 +48,9 @@ if __name__ == "__main__":
     # tryRandomSearch()
     # testLossCalculator()
     # testTournamentSelector()
-    tryGA()
+    testMutatingSegments()
+    print("Mutation test results in files")
+    # tryGA()
     # testGenRandomPopulation()
     # testRouletteSelector()
     pass
