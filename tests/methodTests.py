@@ -1,6 +1,6 @@
 from lossCalculator import LossWeights, LossCalculator
 from pcbBoard import Board, loadFromFile
-from populationEntity import Path, Segment, Direction, PopulationEntity
+from populationEntity import Path, Segment, Direction, PopulationEntity, crossover
 from entitySelectors import TournamentSelector, RouletteSelector
 from utils import generateRandomPopulation
 from visualizer import visualize
@@ -113,3 +113,42 @@ def testFixing():
     print(f"Sample path before: {samplePath}")
     samplePath.fixPath()
     print(f"Sample path after: {samplePath}")
+
+
+def testCrossover():
+    board = Board(16, 16)
+    verticalLine = Path()
+    verticalLine.startingPoint = (13, 13)
+    verticalLine.segments.append(Segment(Direction.UP, 5))
+
+    horizontalLine = Path()
+    horizontalLine.startingPoint = (2, 2)
+    horizontalLine.segments.append(Segment(Direction.RIGHT, 6))
+
+    entity = PopulationEntity()
+    entity.paths = [verticalLine, horizontalLine]
+
+    verticalLine.mutateSegment(0, 1)
+    horizontalLine.mutateSegment(0, 1)
+
+    visualize(entity, board,
+              'C:\\Users\\Staszek\\PycharmProjects\\GeneticAlgorithmsPCB\\testresults\\crossover-entity1.png')
+
+    verticalLine2 = Path()
+    verticalLine2.startingPoint = (13, 13)
+    verticalLine2.segments.append(Segment(Direction.UP, 5))
+
+    horizontalLine2 = Path()
+    horizontalLine2.startingPoint = (2, 2)
+    horizontalLine2.segments.append(Segment(Direction.RIGHT, 6))
+
+    entity2 = PopulationEntity()
+    entity2.paths = [verticalLine2, horizontalLine2]
+
+    visualize(entity2, board,
+              'C:\\Users\\Staszek\\PycharmProjects\\GeneticAlgorithmsPCB\\testresults\\crossover-entity2.png')
+
+    resultEntity = crossover(entity, entity2, 0.5)
+
+    visualize(resultEntity, board,
+              'C:\\Users\\Staszek\\PycharmProjects\\GeneticAlgorithmsPCB\\testresults\\crossover-child.png')

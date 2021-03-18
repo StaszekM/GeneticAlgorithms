@@ -105,8 +105,9 @@ class Path:
         random = Random()
         matchingSegment = self.segments[index]
 
-        cutStartPoint = random.randint(0, matchingSegment.distance - 1)
-        cutEndPoint = random.randint(cutStartPoint + 1, matchingSegment.distance)
+        cutStartPoint = random.randint(0, matchingSegment.distance - (1 if matchingSegment.distance == 1 else 2))
+        cutEndPoint = random.randint(cutStartPoint + (1 if matchingSegment.distance == 1 else 2),
+                                     matchingSegment.distance)
 
         replacementSegments: List[Segment] = []
 
@@ -169,5 +170,3 @@ def crossover(entity1: PopulationEntity, entity2: PopulationEntity, p: float) ->
         else:
             result.paths.append(entity2.paths[index].getCopy())
     return result
-
-
