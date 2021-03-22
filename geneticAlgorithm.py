@@ -1,5 +1,5 @@
 from random import Random
-from typing import List, Set
+from typing import List, Set, Dict, Tuple
 
 from entitySelectors import EntityWithLoss, Selector
 from lossCalculator import LossCalculator
@@ -33,9 +33,14 @@ class GeneticAlgorithm:
         random = Random()
         initialPopulation = generateRandomPopulation(self.populationSize, self.board)
         alphaWeights = [1 for _ in initialPopulation[0].paths]
+        intersectionPointsWeights: Dict[Tuple[int, int], int] = {}
+
+        for x in range(self.board.width + 1):
+            for y in range(self.board.height + 1):
+                intersectionPointsWeights[(x, y)] = 1
 
         populationWithLoss: List[EntityWithLoss] = [
-            (entity, self.lossCalculator.calculateLoss(entity, self.board, alphaWeights)) for
+            (entity, self.lossCalculator.calculateLoss(entity, self.board, alphaWeights, intersectionPointsWeights)) for
             entity in initialPopulation]
 
         populationWithLoss.sort(key=lambda entity: entity[1][0])
@@ -49,8 +54,6 @@ class GeneticAlgorithm:
             newPopulation: List[EntityWithLoss] = []
             self.generation += 1
             print(f"Creating generation {self.generation}")
-
-            betterEntityFound = False
             while len(newPopulation) != self.populationSize:
                 P1: PopulationEntity = self.selector.select(currentPopulation, self.board)
                 P2: PopulationEntity = self.selector.select(currentPopulation, self.board, omitEntity=P1)
@@ -61,22 +64,25 @@ class GeneticAlgorithm:
                     O1: PopulationEntity = P1.getCopy()
 
                 O1.mutate(self.mutationProbability, self.mutationStrength)
-                entityWithLoss = (O1, self.lossCalculator.calculateLoss(O1, self.board, alphaWeights))
-                if bestEntity[1][0] > entityWithLoss[1][0]:
-                    bestEntity = entityWithLoss
-                    betterEntityFound = True
+                entityWithLoss: EntityWithLoss = (
+                    O1, self.lossCalculator.calculateLoss(O1, self.board, alphaWeights, intersectionPointsWeights))
                 newPopulation.append(entityWithLoss)
-            if not betterEntityFound:
-                setOf: Set[int] = bestEntity[1][3]
-                print(setOf)
-                for element in list(setOf):
+
+            bestInGeneration = min(newPopulation, key=lambda ent: ent[1][0])
+            if bestEntity[1][0] > bestInGeneration[1][0]:
+                bestEntity = bestInGeneration
+            else:
+                intersectingPaths: Set[int] = bestInGeneration[1][3]
+                intersectionPoints: Set[Tuple[int, int]] = bestInGeneration[1][4]
+                for element in intersectingPaths:
                     alphaWeights[element] += 1
-                pass
+                for point in intersectionPoints:
+                    intersectionPointsWeights[point] += 1
             currentPopulation = newPopulation
             plotX.append(self.generation)
-            plotY.append(bestEntity[1][0])
+            plotY.append(bestInGeneration[1][0])
             if self.generation % 10 == 0:
-                visualize(bestEntity[0], self.board,
+                visualize(bestInGeneration[0], self.board,
                           f'C:\\Users\\Staszek\\PycharmProjects\\GeneticAlgorithmsPCB\\testresults\\generation-{self.generation}.png')
 
         end = datetime.now()

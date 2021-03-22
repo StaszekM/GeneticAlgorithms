@@ -14,7 +14,7 @@ class LossWeights:
         self.segmentsCount = 1
 
 
-CalculatorResult = Tuple[float, bool, Tuple[int, int, int, int, int], Set[int]]
+CalculatorResult = Tuple[float, bool, Tuple[int, int, int, int, int], Set[int], Set[Tuple[int, int]]]
 
 
 class LossCalculator:
@@ -29,12 +29,13 @@ class LossCalculator:
             dictionary[tupleKey] = {pathIndex}
 
     def calculateLoss(self, populationEntity: PopulationEntity, board: Board,
-                      pathWeights: List[int]) -> CalculatorResult:
+                      pathWeights: List[int], pathIntersectionWeights: Dict[Tuple[int, int], int]) -> CalculatorResult:
         """Calculates loss for a specific Entity on a specific Board, using this Calculator's punishment weights and
         provided weights for intersections.
         returns float - total loss, boolean - true if path is valid (no intersections or paths outside of the board),
         a tuple of ints containing (total paths length, number of segments, number of paths out of the board,
-        total length of segments out of the board, number of intersections)"""
+        total length of segments out of the board, number of intersections), a set of indexes for paths that intersect,
+        a set of tuples indicating intersection points"""
         if len(populationEntity.paths) != len(pathWeights):
             raise ValueError(
                 f"Trying to calculate loss for an entity with {len(populationEntity.paths)} and {len(pathWeights)} "
@@ -117,12 +118,14 @@ class LossCalculator:
                 y += deltaY
 
         intersectingPaths: Set[int] = set()
-        for value in pathLocationsDict.values():
+        intersectionPoints: Set[Tuple[int, int]] = set()
+        for key, value in pathLocationsDict.items():
             if len(value) > 1:
                 setAsList: List[int] = list(value)
                 intersectingPaths.update(setAsList)
                 numberOfIntersections += functools.reduce(
-                    lambda a, b: a * b, [pathWeights[index] for index in list(value)])
+                    lambda a, b: a * b, [pathWeights[index] for index in list(value)]) * pathIntersectionWeights[key]
+                intersectionPoints.add(key)
 
         isValid = numberOfIntersections == 0 and outOfBoardPathCount == 0
 
@@ -137,4 +140,4 @@ class LossCalculator:
                       outOfBoardPathCount,
                       outOfBoardLength,
                       numberOfIntersections),
-            intersectingPaths)
+            intersectingPaths, intersectionPoints)

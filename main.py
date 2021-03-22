@@ -35,7 +35,7 @@ def tryGA():
     lossWeights = LossWeights()
     lossWeights.intersectionCount = 20
     lossWeights.outOfBoardPathCount = 30
-    lossWeights.outOfBoardLength = 25
+    lossWeights.outOfBoardLength = 40
     lossWeights.totalPathLength = 0.5
     lossWeights.segmentsCount = 0.5
     calculator = LossCalculator(lossWeights)

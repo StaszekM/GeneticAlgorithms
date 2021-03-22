@@ -105,9 +105,13 @@ class Path:
         random = Random()
         matchingSegment = self.segments[index]
 
-        cutStartPoint = random.randint(0, matchingSegment.distance - (1 if matchingSegment.distance == 1 else 2))
-        cutEndPoint = random.randint(cutStartPoint + (1 if matchingSegment.distance == 1 else 2),
-                                     matchingSegment.distance)
+        if random.random() > 0.5:
+            cutStartPoint = random.randint(0, matchingSegment.distance - (1 if matchingSegment.distance == 1 else 2))
+            cutEndPoint = random.randint(cutStartPoint + (1 if matchingSegment.distance == 1 else 2),
+                                         matchingSegment.distance)
+        else:
+            cutStartPoint = 0
+            cutEndPoint = matchingSegment.distance
 
         replacementSegments: List[Segment] = []
 
