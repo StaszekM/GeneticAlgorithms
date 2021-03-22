@@ -8,6 +8,8 @@ from populationEntity import PopulationEntity, crossover
 from utils import generateRandomPopulation
 from visualizer import visualize
 
+import os
+
 import matplotlib.pyplot as plt
 from datetime import datetime
 
@@ -103,4 +105,5 @@ class GeneticAlgorithm:
         return False
 
     def plot(self):
+        # plt.savefig(f'C:\\Users\\Staszek\\PycharmProjects\\GeneticAlgorithmsPCB\\testresults\\generation-stats-{self.generation}.png')
         pass

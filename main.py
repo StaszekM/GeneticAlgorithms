@@ -23,7 +23,7 @@ def tryRandomSearch():
 
 
 def tryGA():
-    board = loadFromFile('textTests/zad1.txt')
+    board = loadFromFile('textTests/zad1.5.txt')
     populationSize = 1000
     selector = TournamentSelector(150)
     crossoverThreshold = 0.2
@@ -47,13 +47,13 @@ def tryGA():
 
 if __name__ == "__main__":
     # tryRandomSearch()
-    testLossCalculator()
+    # testLossCalculator()
     # testTournamentSelector()
     # testMutatingSegments()
     # print("Mutation test results in files")
     # testCrossover()
     # print("Crossover test results in files")
-    # tryGA()
+    tryGA()
     # testGenRandomPopulation()
     # testRouletteSelector()
     pass

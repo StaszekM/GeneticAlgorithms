@@ -17,6 +17,10 @@ class Selector(ABC):
         """Allows to select an Entity from population with
         optional omitting of a specific Entity to avoid duplication"""
 
+    @abstractmethod
+    def __str__(self):
+        pass
+
 
 class TournamentSelector(Selector):
     def __init__(self, N: int):
@@ -35,6 +39,9 @@ class TournamentSelector(Selector):
 
             if omitEntity is None or bestSample != omitEntity:
                 return bestSample
+
+    def __str__(self):
+        return f'Selektor turniejowy o rozmiarze {self.N}'
 
 
 class RouletteSelector(Selector):
@@ -57,3 +64,6 @@ class RouletteSelector(Selector):
                 if minRange <= value < maxRange:
                     if omitEntity is None or entity[0] != omitEntity:
                         return entity[0]
+
+    def __str__(self):
+        return f'Selektor ruletkowy'
