@@ -27,6 +27,8 @@ def loadFromFile(filePath: str) -> Board:
 
     lines = file.readlines()
     [width, height] = [int(value) for value in lines[0].strip().split(";")]
+    width -= 1
+    height -= 1
 
     result: Board = Board(width, height)
     for line in lines[1:]:

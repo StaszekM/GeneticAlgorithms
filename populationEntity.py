@@ -1,6 +1,8 @@
 from enum import Enum
 from typing import List
 from random import Random
+
+from pcbBoard import Board
 from utilTypes import Point
 
 
@@ -94,7 +96,7 @@ class Path:
             else:
                 index += 1
 
-    def mutateSegment(self, index: int, strength: int):
+    def mutateSegment(self, index: int, strength: int, board: Board):
         """Mutates a segment at specified index with given offset (>=1)"""
         if not (0 <= index < len(self.segments)):
             raise ValueError(f"Trying to mutate segment with index {index} in a path with "
@@ -104,6 +106,12 @@ class Path:
 
         random = Random()
         matchingSegment = self.segments[index]
+        (x, y) = self.startingPoint
+        for segment in self.segments[:index]:
+            if segment.isHorizontal():
+                x += segment.distance if segment.direction == Direction.RIGHT else -segment.distance
+            else:
+                y += segment.distance if segment.direction == Direction.DOWN else -segment.distance
 
         if random.random() > 0.5:
             cutStartPoint = random.randint(0, matchingSegment.distance - (1 if matchingSegment.distance == 1 else 2))
@@ -117,10 +125,16 @@ class Path:
 
         randomResult = random.random()
         if matchingSegment.isHorizontal():
-            goOutDirection = Direction.UP if randomResult > 0.5 else Direction.DOWN
+            if y <= 0 or y >= board.height:
+                goOutDirection = Direction.DOWN if y <= 0 else Direction.UP
+            else:
+                goOutDirection = Direction.UP if randomResult > 0.5 else Direction.DOWN
             goBackDirection = Direction.DOWN if goOutDirection == Direction.UP else Direction.UP
         else:
-            goOutDirection = Direction.LEFT if randomResult > 0.5 else Direction.RIGHT
+            if x <= 0 or x >= board.width:
+                goOutDirection = Direction.RIGHT if x <= 0 else Direction.LEFT
+            else:
+                goOutDirection = Direction.LEFT if randomResult > 0.5 else Direction.RIGHT
             goBackDirection = Direction.RIGHT if goOutDirection == Direction.LEFT else Direction.LEFT
 
         # build 3 to 5 segments depending on the situation
@@ -151,12 +165,12 @@ class PopulationEntity:
             result.paths.append(path.getCopy())
         return result
 
-    def mutate(self, probability: float, strength: int):
+    def mutate(self, probability: float, strength: int, board: Board):
         random = Random()
         for path in self.paths:
             if random.random() >= probability:
                 segmentIndex = random.randint(0, len(path.segments) - 1)
-                path.mutateSegment(segmentIndex, strength)
+                path.mutateSegment(segmentIndex, strength, board)
 
 
 def crossover(entity1: PopulationEntity, entity2: PopulationEntity, p: float) -> PopulationEntity:

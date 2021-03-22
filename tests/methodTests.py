@@ -42,7 +42,25 @@ def testLossCalculator():
     # outOfBoardPathCount = 1
     # outOfBoardLength = 7
     # numberOfIntersections = 9
-    print(p.calculateLoss(sampleEntity, board, [1, 2, 4]))
+    # print(p.calculateLoss(sampleEntity, board, [1, 2, 4], ))
+
+    # board2: Board = Board(5, 5)
+    # ent = PopulationEntity()
+    # path1 = Path()
+    # path1.startingPoint = (1, 3)
+    # path1.segments = [Segment(Direction.RIGHT, 2), Segment(Direction.UP, 2), Segment(Direction.RIGHT, 1)]
+    # path2 = Path()
+    # path2.startingPoint = (3, 1)
+    # path2.segments = [Segment(Direction.RIGHT, 1), Segment(Direction.DOWN, 2), Segment(Direction.LEFT, 1)]
+    # ent.paths = [path1, path2]
+    #
+    # dic = {}
+    # for x in range(6):
+    #     for y in range(6):
+    #         dic[(x, y)] = 1
+    #
+    # print(p.calculateLoss(ent, board2, [1, 1], dic))
+
 
 
 def testMutatingSegments():

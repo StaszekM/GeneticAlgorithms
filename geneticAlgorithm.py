@@ -63,7 +63,7 @@ class GeneticAlgorithm:
                 else:
                     O1: PopulationEntity = P1.getCopy()
 
-                O1.mutate(self.mutationProbability, self.mutationStrength)
+                O1.mutate(self.mutationProbability, self.mutationStrength, self.board)
                 entityWithLoss: EntityWithLoss = (
                     O1, self.lossCalculator.calculateLoss(O1, self.board, alphaWeights, intersectionPointsWeights))
                 newPopulation.append(entityWithLoss)
@@ -97,7 +97,7 @@ class GeneticAlgorithm:
 
     def __stopCondition(self, population: List[EntityWithLoss]) -> bool:
         for entity in population:
-            if entity[1][1] or entity[1][0] <= self.maximumLoss or self.generation > 2000:
+            if entity[1][1] or self.generation > 2000:
                 return True
 
         return False
