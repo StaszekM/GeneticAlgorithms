@@ -1,7 +1,8 @@
 from pcbBoard import Board
 from populationEntity import PopulationEntity, Direction
 
-from typing import List, Tuple
+from typing import List, Tuple, Dict, Set
+import functools
 
 
 class LossWeights:
@@ -13,7 +14,7 @@ class LossWeights:
         self.segmentsCount = 1
 
 
-CalculatorResult = Tuple[float, bool, Tuple[int, int, int, int, int]]
+CalculatorResult = Tuple[float, bool, Tuple[int, int, int, int, int], Set[int]]
 
 
 class LossCalculator:
@@ -21,17 +22,24 @@ class LossCalculator:
         self.lossWeights = lossWeights
 
     @staticmethod
-    def __safeAdd(tupleKey: Tuple[int, int], dictionary: dict):
+    def __safeAdd(tupleKey: Tuple[int, int], dictionary: Dict[Tuple[int, int], Set[int]], pathIndex: int):
         if tupleKey in dictionary:
-            dictionary[tupleKey] += 1
+            dictionary[tupleKey].add(pathIndex)
         else:
-            dictionary[tupleKey] = 1
+            dictionary[tupleKey] = {pathIndex}
 
-    def calculateLoss(self, populationEntity: PopulationEntity, board: Board) -> CalculatorResult:
-        """Calculates loss for a specific Entity on a specific Board, using this Calculator's punishment weights,
+    def calculateLoss(self, populationEntity: PopulationEntity, board: Board,
+                      pathWeights: List[int]) -> CalculatorResult:
+        """Calculates loss for a specific Entity on a specific Board, using this Calculator's punishment weights and
+        provided weights for intersections.
         returns float - total loss, boolean - true if path is valid (no intersections or paths outside of the board),
         a tuple of ints containing (total paths length, number of segments, number of paths out of the board,
         total length of segments out of the board, number of intersections)"""
+        if len(populationEntity.paths) != len(pathWeights):
+            raise ValueError(
+                f"Trying to calculate loss for an entity with {len(populationEntity.paths)} and {len(pathWeights)} "
+                f"provided weights")
+
         totalPathLength = 0
         segmentsCount = 0
         outOfBoardPathCount = 0
@@ -40,11 +48,11 @@ class LossCalculator:
 
         # map of path locations on the board, 0 means no path on the specific intersection,
         # 1 means 1 path, 2 means 2 paths...
-        pathLocationsDict = {}
+        pathLocationsDict: Dict[Tuple[int, int], Set[int]] = {}
 
-        for path in populationEntity.paths:
+        for pathIndex, path in enumerate(populationEntity.paths):
             (x, y) = path.startingPoint
-            self.__safeAdd((x, y), pathLocationsDict)
+            self.__safeAdd((x, y), pathLocationsDict, pathIndex)
 
             pathOutOfBoard = False
             isCurrentlyOutside = False
@@ -59,25 +67,25 @@ class LossCalculator:
                     deltaY = -segment.distance
                     for i in range(1, segment.distance + 1):
                         if 0 <= y - i <= board.height and 0 <= x <= board.width:
-                            self.__safeAdd((x, y - i), pathLocationsDict)
+                            self.__safeAdd((x, y - i), pathLocationsDict, pathIndex)
                 elif segment.direction == Direction.RIGHT:
                     deltaX = segment.distance
                     deltaY = 0
                     for i in range(1, segment.distance + 1):
                         if 0 <= x + i <= board.width and 0 <= y <= board.height:
-                            self.__safeAdd((x + i, y), pathLocationsDict)
+                            self.__safeAdd((x + i, y), pathLocationsDict, pathIndex)
                 elif segment.direction == Direction.DOWN:
                     deltaX = 0
                     deltaY = segment.distance
                     for i in range(1, segment.distance + 1):
                         if 0 <= y + i <= board.height and 0 <= x <= board.width:
-                            self.__safeAdd((x, y + i), pathLocationsDict)
+                            self.__safeAdd((x, y + i), pathLocationsDict, pathIndex)
                 else:
                     deltaX = -segment.distance
                     deltaY = 0
                     for i in range(1, segment.distance + 1):
                         if 0 <= x - i <= board.width and 0 <= y <= board.height:
-                            self.__safeAdd((x - i, y), pathLocationsDict)
+                            self.__safeAdd((x - i, y), pathLocationsDict, pathIndex)
 
                 # check if segment goes at least partially outside of the board
                 if 0 <= x + deltaX <= board.width and 0 <= y + deltaY <= board.height:
@@ -108,9 +116,13 @@ class LossCalculator:
                 x += deltaX
                 y += deltaY
 
+        intersectingPaths: Set[int] = set()
         for value in pathLocationsDict.values():
-            if value > 1:
-                numberOfIntersections += value - 1
+            if len(value) > 1:
+                setAsList: List[int] = list(value)
+                intersectingPaths.update(setAsList)
+                numberOfIntersections += functools.reduce(
+                    lambda a, b: a * b, [pathWeights[index] for index in list(value)])
 
         isValid = numberOfIntersections == 0 and outOfBoardPathCount == 0
 
@@ -124,4 +136,5 @@ class LossCalculator:
                       segmentsCount,
                       outOfBoardPathCount,
                       outOfBoardLength,
-                      numberOfIntersections))
+                      numberOfIntersections),
+            intersectingPaths)

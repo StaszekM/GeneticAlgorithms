@@ -16,8 +16,9 @@ class RandomSearch:
                 print(f"Attempt {i + 1}/{numberOfRounds}")
 
             population = generateRandomPopulation(1000, board)
+            alphaWeights = [1 for _ in population[0].paths]
             for entity in population:
-                (_, isValid, _) = lossCalculator.calculateLoss(entity, board)
+                (_, isValid, _, _) = lossCalculator.calculateLoss(entity, board, alphaWeights)
                 if isValid:
                     return entity
         return None

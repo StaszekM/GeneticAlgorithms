@@ -42,7 +42,7 @@ def testLossCalculator():
     # outOfBoardPathCount = 1
     # outOfBoardLength = 7
     # numberOfIntersections = 9
-    print(p.calculateLoss(sampleEntity, board))
+    print(p.calculateLoss(sampleEntity, board, [1, 2, 4]))
 
 
 def testMutatingSegments():
@@ -89,7 +89,7 @@ def testTournamentSelector():
     selector: TournamentSelector = TournamentSelector(500)
 
     calculator: LossCalculator = LossCalculator(LossWeights())
-    popWithLoss = [(entity, calculator.calculateLoss(entity, board)) for entity in population]
+    popWithLoss = [(entity, calculator.calculateLoss(entity, board, [1, 1])) for entity in population]
     selector.select(popWithLoss, board)
 
 
@@ -99,7 +99,7 @@ def testRouletteSelector():
     selector: RouletteSelector = RouletteSelector()
 
     calculator: LossCalculator = LossCalculator(LossWeights())
-    popWithLoss = [(entity, calculator.calculateLoss(entity, board)) for entity in population]
+    popWithLoss = [(entity, calculator.calculateLoss(entity, board, [1, 1])) for entity in population]
     selector.select(popWithLoss, board)
 
 

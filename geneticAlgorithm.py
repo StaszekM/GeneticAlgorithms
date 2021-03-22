@@ -1,5 +1,5 @@
 from random import Random
-from typing import List
+from typing import List, Set
 
 from entitySelectors import EntityWithLoss, Selector
 from lossCalculator import LossCalculator
@@ -32,8 +32,11 @@ class GeneticAlgorithm:
         start = datetime.now()
         random = Random()
         initialPopulation = generateRandomPopulation(self.populationSize, self.board)
-        populationWithLoss: List[EntityWithLoss] = [(entity, self.lossCalculator.calculateLoss(entity, self.board)) for
-                                                    entity in initialPopulation]
+        alphaWeights = [1 for _ in initialPopulation[0].paths]
+
+        populationWithLoss: List[EntityWithLoss] = [
+            (entity, self.lossCalculator.calculateLoss(entity, self.board, alphaWeights)) for
+            entity in initialPopulation]
 
         populationWithLoss.sort(key=lambda entity: entity[1][0])
         bestEntity = populationWithLoss[0]
@@ -46,6 +49,8 @@ class GeneticAlgorithm:
             newPopulation: List[EntityWithLoss] = []
             self.generation += 1
             print(f"Creating generation {self.generation}")
+
+            betterEntityFound = False
             while len(newPopulation) != self.populationSize:
                 P1: PopulationEntity = self.selector.select(currentPopulation, self.board)
                 P2: PopulationEntity = self.selector.select(currentPopulation, self.board, omitEntity=P1)
@@ -56,10 +61,17 @@ class GeneticAlgorithm:
                     O1: PopulationEntity = P1.getCopy()
 
                 O1.mutate(self.mutationProbability, self.mutationStrength)
-                entityWithLoss = (O1, self.lossCalculator.calculateLoss(O1, self.board))
+                entityWithLoss = (O1, self.lossCalculator.calculateLoss(O1, self.board, alphaWeights))
                 if bestEntity[1][0] > entityWithLoss[1][0]:
                     bestEntity = entityWithLoss
+                    betterEntityFound = True
                 newPopulation.append(entityWithLoss)
+            if not betterEntityFound:
+                setOf: Set[int] = bestEntity[1][3]
+                print(setOf)
+                for element in list(setOf):
+                    alphaWeights[element] += 1
+                pass
             currentPopulation = newPopulation
             plotX.append(self.generation)
             plotY.append(bestEntity[1][0])
