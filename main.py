@@ -47,13 +47,13 @@ def tryGA():
 
 if __name__ == "__main__":
     # tryRandomSearch()
-    # testLossCalculator()
+    testLossCalculator()
     # testTournamentSelector()
     # testMutatingSegments()
     # print("Mutation test results in files")
     # testCrossover()
     # print("Crossover test results in files")
-    tryGA()
+    # tryGA()
     # testGenRandomPopulation()
     # testRouletteSelector()
     pass

@@ -61,6 +61,19 @@ def testLossCalculator():
     #
     # print(p.calculateLoss(ent, board2, [1, 1], dic))
 
+    # board2: Board = Board(5, 5)
+    # ent = PopulationEntity()
+    # path1 = Path()
+    # path1.startingPoint = (1, 1)
+    # path1.segments = [Segment(Direction.RIGHT, 2), Segment(Direction.DOWN, 2), Segment(Direction.LEFT, 1), Segment(Direction.UP, 2)]
+    # ent.paths = [path1]
+    #
+    # dic = {}
+    # for x in range(6):
+    #     for y in range(6):
+    #         dic[(x, y)] = 1
+    #
+    # print(p.calculateLoss(ent, board2, [1], dic))
 
 
 def testMutatingSegments():

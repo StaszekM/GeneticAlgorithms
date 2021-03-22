@@ -22,11 +22,14 @@ class LossCalculator:
         self.lossWeights = lossWeights
 
     @staticmethod
-    def __safeAdd(tupleKey: Tuple[int, int], dictionary: Dict[Tuple[int, int], Set[int]], pathIndex: int):
+    def __safeAdd(tupleKey: Tuple[int, int], dictionary: Dict[Tuple[int, int], Tuple[int, Set[int]]], pathIndex: int):
         if tupleKey in dictionary:
-            dictionary[tupleKey].add(pathIndex)
+            (count, pathSet) = dictionary[tupleKey]
+            count += 1
+            pathSet.add(pathIndex)
+            dictionary[tupleKey] = (count, pathSet)
         else:
-            dictionary[tupleKey] = {pathIndex}
+            dictionary[tupleKey] = (1, {pathIndex})
 
     def calculateLoss(self, populationEntity: PopulationEntity, board: Board,
                       pathWeights: List[int], pathIntersectionWeights: Dict[Tuple[int, int], int]) -> CalculatorResult:
@@ -49,7 +52,7 @@ class LossCalculator:
 
         # map of path locations on the board, 0 means no path on the specific intersection,
         # 1 means 1 path, 2 means 2 paths...
-        pathLocationsDict: Dict[Tuple[int, int], Set[int]] = {}
+        pathLocationsDict: Dict[Tuple[int, int], Tuple[int, Set[int]]] = {}
 
         for pathIndex, path in enumerate(populationEntity.paths):
             (x, y) = path.startingPoint
@@ -120,11 +123,12 @@ class LossCalculator:
         intersectingPaths: Set[int] = set()
         intersectionPoints: Set[Tuple[int, int]] = set()
         for key, value in pathLocationsDict.items():
-            if len(value) > 1:
-                setAsList: List[int] = list(value)
+            (count, intersectingPathsSet) = value
+            if count > 1:
+                setAsList: List[int] = list(intersectingPathsSet)
                 intersectingPaths.update(setAsList)
                 numberOfIntersections += functools.reduce(
-                    lambda a, b: a * b, [pathWeights[index] for index in list(value)]) * pathIntersectionWeights[key]
+                    lambda a, b: a * b, [pathWeights[index] for index in setAsList]) * pathIntersectionWeights[key]
                 intersectionPoints.add(key)
 
         isValid = numberOfIntersections == 0 and outOfBoardPathCount == 0
