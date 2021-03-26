@@ -1,3 +1,4 @@
+from automaticTester import runTests
 from entitySelectors import TournamentSelector, RouletteSelector
 from geneticAlgorithm import GeneticAlgorithm
 from lossCalculator import LossWeights, LossCalculator
@@ -10,7 +11,7 @@ from visualizer import visualize
 
 
 def tryRandomSearch():
-    board = loadFromFile('textTests/zad0.5.txt')
+    board = loadFromFile('textTests/zad1.txt')
     result = RandomSearch.RandomSearch(board, 10, printOutput=True)
     if result is None:
         print("Could not find a solution")
@@ -42,18 +43,20 @@ def tryGA():
 
     alg = GeneticAlgorithm(board, populationSize, calculator, selector, crossoverThreshold, crossoverProbability,
                            mutationProbability, mutationStrength, maximumLoss)
-    alg.algorithm()
+    res = alg.algorithm()
+    print(res)
 
 
 if __name__ == "__main__":
-    # tryRandomSearch()
+    tryRandomSearch()
     # testLossCalculator()
     # testTournamentSelector()
     # testMutatingSegments()
     # print("Mutation test results in files")
     # testCrossover()
     # print("Crossover test results in files")
-    tryGA()
+    # tryGA()
     # testGenRandomPopulation()
     # testRouletteSelector()
+    # runTests()
     pass
